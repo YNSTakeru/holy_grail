@@ -8,7 +8,7 @@
       />
       <span class="font-bold text-black">今昔動画</span>
     </h1>
-    <nav>
+    <nav class="" @click="openModal">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="black"
@@ -20,11 +20,43 @@
         />
       </svg>
     </nav>
+    <div
+      id="overlay"
+      class="
+        absolute
+        z-10
+        fixed
+        top-0
+        left-0
+        w-screen
+        bg-white
+        flex
+        p-4
+        border border-gray-400
+      "
+      v-show="showContent"
+    >
+      <div id="contet" class="z-20">
+        <button>く</button>
+        <input class="ml-2 p-2" type="text" placeholder="キーワードを入力" />
+      </div>
+    </div>
   </header>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      showContent: false,
+    };
+  },
+  methods: {
+    openModal() {
+      this.showContent = true;
+    },
+  },
+};
 </script>
 
 <style scoped>
