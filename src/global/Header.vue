@@ -20,25 +20,24 @@
         />
       </svg>
     </nav>
-    <div
-      id="overlay"
-      class="
-        absolute
-        z-10
-        fixed
-        top-0
-        left-0
-        w-screen
-        bg-white
-        flex
-        p-4
-        border border-gray-400
-      "
-      v-show="showContent"
-    >
-      <div id="contet" class="z-20">
-        <button>く</button>
-        <input class="ml-2 p-2" type="text" placeholder="キーワードを入力" />
+    <div class="fixed top-0 left-0">
+      <div
+        id="overlay"
+        class="absolute z-10 w-screen bg-white flex p-4 border border-gray-400"
+        v-show="showContent"
+      >
+        <div id="contet" class="z-20 flex">
+          <button @click="showContent = false">く</button>
+          <form @submit.prevent @click="search">
+            <input
+              class="ml-2 p-2 border"
+              type="text"
+              placeholder="キーワードを入力"
+              v-model.lazy="params.q"
+            />
+            <button class="p-2 border bg-gray-400 text-white">検索</button>
+          </form>
+        </div>
       </div>
     </div>
   </header>
@@ -49,11 +48,25 @@ export default {
   data() {
     return {
       showContent: false,
+      params: {
+        q: "",
+        part: "snippet",
+        type: "video",
+        maxResults: "50",
+        publishedBefore: "2007-12-31T23:59:59Z",
+        key: `${process.env.VUE_APP_FIREBASE_API_KEY}`,
+        order: "viewCount",
+      },
     };
   },
   methods: {
     openModal() {
       this.showContent = true;
+    },
+    search() {
+      this.$store.dispatch("search", {
+        params: this.params,
+      });
     },
   },
 };
