@@ -43,9 +43,9 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("search", {
-      params: this.params,
-    });
+    // this.$store.dispatch("search", {
+    //   params: this.params,
+    // });
   },
   computed: {
     videoPath() {
