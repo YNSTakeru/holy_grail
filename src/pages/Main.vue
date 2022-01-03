@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -43,13 +45,17 @@ export default {
     };
   },
   created() {
-    // this.$store.dispatch("search", {
-    //   params: this.params,
-    // });
+    this.search();
   },
   computed: {
     videoPath() {
       return `https://www.youtube.com/watch?v=${this.videoId}`;
+    },
+  },
+  methods: {
+    ...mapActions(["searchAction"]),
+    search() {
+      this.searchAction({ params: this.params });
     },
   },
 };
