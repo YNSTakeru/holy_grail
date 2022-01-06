@@ -4,6 +4,7 @@ import App from "./App.vue";
 import "./assets/tailwind.css";
 import router from "./router";
 import store from "./store";
+import './plugins/element.js'
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
