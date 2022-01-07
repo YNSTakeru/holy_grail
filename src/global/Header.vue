@@ -124,6 +124,31 @@
         >
         </el-option>
      </el-select>
+      <v-menu
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field
+          v-model="date"
+          label="検索開始期間"
+          prepend-icon="mdi-calendar"
+          readonly
+          v-bind="attrs"
+          v-on="on"
+        ></v-text-field>
+      </template>
+      <v-date-picker
+        v-model="date"
+        :active-picker.sync="activePicker"
+        :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+        min="2015-12-15"
+      ></v-date-picker>
+    </v-menu>
     </div>
   </div>
   </header>
@@ -149,13 +174,21 @@ export default {
         order: "viewCount",
       },
       orderOptions: [{value: "date",label: "投稿が新しい順"},{value: "rating",label: "高評価の多い順"},{value: "relevance",label: "関連性の高い順"},{value: "title",label: "アルファベット昇順"},{value: "viewCount",label: "再生回数の多い順"}],
-      orderValue: ""
+      orderValue: "",
+      activePicker: null,
+      date: null,
+      menu: false
     };
   },
   created(){
     this.orderValue = ""
   },
   watch: {
+    menu(val){
+      val && setTimeout(() => {
+        this.activePicker = "YEAR"
+      })
+    },
     keyword(newKeyword) {
       if (newKeyword !== "") {
         this.showCross = true;
@@ -168,7 +201,6 @@ export default {
   },
   methods: {
     ...mapActions(["searchAction"]),
-
     openModal() {
       this.showContent = true;
     },
@@ -183,6 +215,10 @@ export default {
       this.keyword = "";
       this.params.q = "";
     },
+    save(date){
+      // menuの子要素であるsave()を呼び出す
+      this.$refs.menu.save(date)
+    }
   },
 };
 </script>

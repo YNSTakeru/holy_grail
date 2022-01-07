@@ -5,6 +5,7 @@ import "./assets/tailwind.css";
 import router from "./router";
 import store from "./store";
 import './plugins/element.js'
+import vuetify from './plugins/vuetify'
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -23,5 +24,6 @@ Vue.config.productionTip = false;
 new Vue({
   store,
   router,
-  render: (h) => h(App),
+  vuetify,
+  render: (h) => h(App)
 }).$mount("#app");

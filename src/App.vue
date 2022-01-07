@@ -1,19 +1,23 @@
 <template>
-  <div id="app" class="bg-gray-200">
+  <v-app>
     <Header />
-    <router-view />
-  </div>
+    <v-main>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import Header from "@/global/Header";
+import Header from "@/global/Header"
+
 export default {
+  name: 'App',
+
+  data: () => ({
+    //
+  }),
   components: {
-    Header,
-  },
+    Header
+  }
 };
 </script>
-
-
-<style>
-</style>
