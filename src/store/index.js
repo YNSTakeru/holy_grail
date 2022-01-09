@@ -8,6 +8,7 @@ import {
 } from "firebase/firestore";
 import Vue from "vue";
 import Vuex from "vuex";
+import config from "./config";
 
 Vue.use(Vuex);
 
@@ -24,12 +25,11 @@ export default new Vuex.Store({
     async searchAction({ commit }, request) {
       // firebaseに登録されているか確認する
       const db = getFirestore();
-
-      const docRef = doc(
-        db,
-        "videoList",
-        request.params.q + request.params.publishedBefore
-      );
+      const requestParams =
+        request.params.q +
+        request.params.publishedBefore +
+        request.params.order;
+      const docRef = doc(db, "videoList", requestParams);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
@@ -53,14 +53,12 @@ export default new Vuex.Store({
                 channelTitle: item.snippet.channelTitle,
               });
             });
+
             const videosRef = collection(db, "videoList");
 
-            setDoc(
-              doc(videosRef, request.params.q + request.params.publishedBefore),
-              {
-                videoList: videoList,
-              }
-            );
+            setDoc(doc(videosRef, requestParams), {
+              videoList: videoList,
+            });
             commit("updateVideoList", videoList);
           })
           .catch((error) => {
@@ -69,5 +67,15 @@ export default new Vuex.Store({
       }
     },
   },
-  modules: {},
+  getters: {
+    videoList(state) {
+      return state.videoList;
+    },
+    order() {
+      return config.state.order;
+    },
+  },
+  modules: {
+    config,
+  },
 });

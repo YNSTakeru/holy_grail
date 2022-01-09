@@ -1,23 +1,31 @@
 <template>
-   <div class="p-4 w-50 flex flex-col gap-4">
-      <el-select id="orderSelect" v-model="orderValue" filterable placeholder="並び順を設定">
-        <el-option class="orderOption"
-          v-for="orderItem in orderOptions"
-          :key="orderItem.value"
-          :label="orderItem.label"
-          :value="orderItem.value"
-        >
-        </el-option>
-     </el-select>
+  <div v-show="showConfig">
+    <Select class="fixed top-16 left-0 w-screen h-auto z-10 bg-gray-100" />
   </div>
 </template>
 
 <script>
+import Select from "@/components/config/Select";
+import { mapGetters } from "vuex";
 export default {
-
-}
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters("config", ["showConfig"]),
+  },
+  components: {
+    Select,
+  },
+};
 </script>
 
 <style>
-
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>

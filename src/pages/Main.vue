@@ -5,7 +5,7 @@
     </div>
     <div
       class="mb-4 flex flex-col"
-      v-for="video in $store.state.videoList"
+      v-for="video in videoList"
       :key="video.videoId"
     >
       <a
@@ -40,7 +40,7 @@ export default {
         maxResults: "50",
         publishedBefore: "2007-12-31T23:59:59Z",
         key: `${process.env.VUE_APP_FIREBASE_API_KEY}`,
-        order: "viewCount",
+        order: "date",
       },
     };
   },
@@ -51,10 +51,15 @@ export default {
     videoPath() {
       return `https://www.youtube.com/watch?v=${this.videoId}`;
     },
+    videoList() {
+      return this.$store.getters.videoList;
+    },
   },
   methods: {
-    ...mapActions(["searchAction"]),
+    ...mapActions(["searchAction", "order"]),
+    ...mapActions("config", ["setParamsAction"]),
     search() {
+      this.setParamsAction({ params: this.params });
       this.searchAction({ params: this.params });
     },
   },
