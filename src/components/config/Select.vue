@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 w-50 flex flex-col gap-4" @click="closeConfig">
+  <div class="p-4 py-0 w-50 flex flex-col gap-4" @click="closeConfig">
     <div
       id="inputOrderWrapper"
       class="relative w-full h-auto"

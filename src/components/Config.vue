@@ -1,11 +1,30 @@
 <template>
-  <div v-show="showConfig">
-    <Select class="fixed top-16 left-0 w-screen h-auto z-10 bg-gray-100" />
+  <div
+    class="
+      py-4
+      fixed
+      top-16
+      left-0
+      w-screen
+      h-auto
+      z-10
+      bg-gray-100 bg-opacity-90
+      flex flex-col
+      gap-4
+    "
+  >
+    <transition name="fade" mode="out-in" class="">
+      <Select v-show="showConfig" class="" />
+    </transition>
+    <transition name="fade">
+      <SelectPublishedAfter v-show="showConfig" mode="out-in" />
+    </transition>
   </div>
 </template>
 
 <script>
 import Select from "@/components/config/Select";
+import SelectPublishedAfter from "@/components/config/SelectPublishedAfter";
 import { mapGetters } from "vuex";
 export default {
   data() {
@@ -16,6 +35,7 @@ export default {
   },
   components: {
     Select,
+    SelectPublishedAfter,
   },
 };
 </script>
