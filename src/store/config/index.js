@@ -2,6 +2,7 @@ const state = {
   order: "viewCount",
   params: {},
   showConfig: false,
+  selectedYear: ""
 };
 const mutations = {
   setOrder(state, order) {
@@ -13,6 +14,9 @@ const mutations = {
   changeShowConfig(state) {
     state.showConfig = !state.showConfig;
   },
+  setSelectedYear(state,year){
+    state.selectedYear = year
+  }
 };
 const actions = {
   setOrderAction({ commit }, order) {
@@ -24,6 +28,9 @@ const actions = {
   changeShowConfigAction({ commit }) {
     commit("changeShowConfig");
   },
+  setSelectedYearAction({commit},request){
+    commit("setSelectedYear",request.selectedYear)
+  }
 };
 const getters = {
   params() {
@@ -32,6 +39,9 @@ const getters = {
   showConfig() {
     return state.showConfig;
   },
+  setSelectedYear(){
+    return 
+  }
 };
 
 export default {

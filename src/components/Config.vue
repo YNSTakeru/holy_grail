@@ -24,7 +24,7 @@
 
 <script>
 import Select from "@/components/config/Select";
-import SelectPublishedAfter from "@/components/config/SelectPublishedAfter";
+// import SelectPublishedAfter from "@/components/config/SelectPublishedAfter";
 import { mapGetters } from "vuex";
 export default {
   data() {
@@ -35,7 +35,7 @@ export default {
   },
   components: {
     Select,
-    SelectPublishedAfter,
+    // SelectPublishedAfter,
   },
 };
 </script>
