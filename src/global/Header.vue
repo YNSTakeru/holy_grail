@@ -36,7 +36,7 @@
             "
           >
             <div id="contet" class="z-20 flex items-center">
-              <button class="w-10 h-auto p-1" @click="showContent = false">
+              <button class="w-10 h-auto p-1" @click="back">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Config from "@/components/Config";
 
 export default {
@@ -170,6 +170,9 @@ export default {
   created() {
     this.orderValue = "";
   },
+  computed: {
+    ...mapGetters("config", ["showConfig"]),
+  },
   watch: {
     keyword(newKeyword) {
       this.params.q = this.keyword;
@@ -187,6 +190,10 @@ export default {
   methods: {
     ...mapActions(["searchAction"]),
     ...mapActions("config", ["setParamsAction", "changeShowConfigAction"]),
+    back() {
+      this.changeShowConfigAction();
+      this.showContent = false;
+    },
     openModal() {
       this.showContent = true;
     },
