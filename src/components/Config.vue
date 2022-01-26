@@ -54,11 +54,10 @@
         ></v-date-picker>
       </v-menu>
     </div>
-
-    <div class="px-4">
+    <div class="px-6">
       <v-select
-        v-model="select"
-        :items="items"
+        v-model="startHourSelect"
+        :items="startHourItems"
         item-text="state"
         item-value="abbr"
         label="Select"
@@ -80,8 +79,8 @@ export default {
       startActivePicker: null,
       date: null,
       menu: false,
-      select: { state: "0時", abbr: "0" },
-      items: [
+      startHourSelect: { state: "0時", abbr: "0" },
+      startHourItems: [
         { state: "0時", abbr: "0" },
         { state: "1時", abbr: "1" },
         { state: "2時", abbr: "2" },
