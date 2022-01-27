@@ -2,7 +2,8 @@ const state = {
   order: "viewCount",
   params: {},
   showConfig: false,
-  selectedYear: ""
+  startDate: "2005-4-23",
+  startTime: "00:00",
 };
 const mutations = {
   setOrder(state, order) {
@@ -14,9 +15,12 @@ const mutations = {
   changeShowConfig(state) {
     state.showConfig = !state.showConfig;
   },
-  setSelectedYear(state,year){
-    state.selectedYear = year
-  }
+  setSelectedYear(state, year) {
+    state.selectedYear = year;
+  },
+  setStartDateMutation(state, { date }) {
+    state.startDate = date;
+  },
 };
 const actions = {
   setOrderAction({ commit }, order) {
@@ -28,9 +32,12 @@ const actions = {
   changeShowConfigAction({ commit }) {
     commit("changeShowConfig");
   },
-  setSelectedYearAction({commit},request){
-    commit("setSelectedYear",request.selectedYear)
-  }
+  setSelectedYearAction({ commit }, request) {
+    commit("setSelectedYear", request.selectedYear);
+  },
+  setStartDateAction({ commit }, { date }) {
+    commit("setStartDateMutation", { date });
+  },
 };
 const getters = {
   params() {
@@ -39,9 +46,9 @@ const getters = {
   showConfig() {
     return state.showConfig;
   },
-  setSelectedYear(){
-    return 
-  }
+  setSelectedYear() {
+    return;
+  },
 };
 
 export default {

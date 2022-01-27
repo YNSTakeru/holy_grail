@@ -17,42 +17,9 @@
     <transition name="fade" mode="out-in" class="">
       <Select v-show="showConfig" class="" />
     </transition>
-    <transition name="fade">
-      <SelectPublishedAfter v-show="showConfig" mode="out-in" />
-    </transition>
     <div class="px-4 font-bold">期間を指定</div>
     <div class="px-4">
-      <v-menu
-        ref="menu"
-        v-model="menu"
-        :close-on-content-click="false"
-        transition="scale-transition"
-        offset-y
-        min-width="auto"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="date"
-            label="開始日"
-            prepend-icon="mdi-calendar"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-date-picker
-          v-model="date"
-          :active-picker.sync="startActivePicker"
-          :max="
-            new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-              .toISOString()
-              .substr(0, 10)
-          "
-          min="2005-04-23"
-          @change="save"
-          locale="ja_JP"
-        ></v-date-picker>
-      </v-menu>
+      <DateTimePicker @getDateEmit="getDateReceive" text="開始日" />
     </div>
     <div class="px-6">
       <v-select
@@ -71,14 +38,12 @@
 
 <script>
 import Select from "@/components/config/Select";
-// import SelectPublishedAfter from "@/components/config/SelectPublishedAfter";
-import { mapGetters } from "vuex";
+import DateTimePicker from "@/components/config/DateTimePicker";
+
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      startActivePicker: null,
-      date: null,
-      menu: false,
       startHourSelect: { state: "0時", abbr: "0" },
       startHourItems: [
         { state: "0時", abbr: "0" },
@@ -111,19 +76,16 @@ export default {
   computed: {
     ...mapGetters("config", ["showConfig"]),
   },
-  watch: {
-    menu(val) {
-      val && setTimeout(() => (this.startActivePicker = "YEAR"));
-    },
-  },
+
   methods: {
-    save(date) {
-      this.$refs.menu.save(date);
+    ...mapActions("config", ["setStartDateAction"]),
+    getDateReceive(date) {
+      this.setStartDateAction({ date });
     },
   },
   components: {
     Select,
-    // SelectPublishedAfter,
+    DateTimePicker,
   },
 };
 </script>
