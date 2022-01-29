@@ -111,7 +111,7 @@
                     />
                   </svg>
                 </button>
-                <button class="ml-2 w-7 h-auto" @click="openConfig">
+                <button class="ml-2 w-7 h-auto" @click.stop="openConfig">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="black"
@@ -148,11 +148,12 @@ export default {
       showContent: false,
       showCross: false,
       keyword: "",
-      params: {
+      pms: {
         q: "",
         part: "snippet",
         type: "video",
         maxResults: "50",
+        publishedAfter: "2005-4-23T00:00:00Z",
         publishedBefore: "2007-12-31T23:59:59Z",
         key: `${process.env.VUE_APP_FIREBASE_API_KEY}`,
         order: "viewCount",
@@ -171,12 +172,13 @@ export default {
     this.orderValue = "";
   },
   computed: {
-    ...mapGetters("config", ["showConfig"]),
+    ...mapGetters("config", ["showConfig", "params"]),
   },
   watch: {
     keyword(newKeyword) {
-      this.params.q = this.keyword;
-      this.setParamsAction({ params: this.params });
+      this.pms = this.params;
+      this.pms.q = newKeyword;
+      this.setParamsAction({ params: this.pms });
       if (newKeyword !== "") {
         this.showCross = true;
       } else {
@@ -201,13 +203,14 @@ export default {
       this.changeShowConfigAction();
     },
     search() {
-      this.params.q = this.keyword;
-      this.setParamsAction({ params: this.params });
-      this.searchAction({ params: this.params });
+      this.pms = this.params;
+      this.pms.q = this.keyword;
+      this.setParamsAction({ params: this.pms });
+      this.searchAction({ params: this.pms });
     },
     clear() {
       this.keyword = "";
-      this.params.q = "";
+      this.pms.q = "";
     },
     setSearchInputBorder() {
       const searchInputBox = document.getElementById("searchInputBox");

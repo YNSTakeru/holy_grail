@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -38,6 +38,7 @@ export default {
         part: "snippet",
         type: "video",
         maxResults: "50",
+        publishedAfter: "2005-4-23T00:00:00Z",
         publishedBefore: "2007-12-31T23:59:59Z",
         key: `${process.env.VUE_APP_FIREBASE_API_KEY}`,
         order: "date",
@@ -48,6 +49,7 @@ export default {
     this.search();
   },
   computed: {
+    ...mapGetters("config", ["publishedAfter", "publishedBefore"]),
     videoPath() {
       return `https://www.youtube.com/watch?v=${this.videoId}`;
     },
@@ -59,6 +61,9 @@ export default {
     ...mapActions(["searchAction", "order"]),
     ...mapActions("config", ["setParamsAction"]),
     search() {
+      this.params.publishedAfter = this.publishedAfter;
+      this.params.publishedBefore = this.publishedBefore;
+
       this.setParamsAction({ params: this.params });
       this.searchAction({ params: this.params });
     },

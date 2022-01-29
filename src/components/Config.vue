@@ -18,74 +18,137 @@
       <Select v-show="showConfig" class="" />
     </transition>
     <div class="px-4 font-bold">期間を指定</div>
-    <div class="px-4">
-      <DateTimePicker @getDateEmit="getDateReceive" text="開始日" />
-    </div>
-    <div class="px-6">
-      <v-select
-        v-model="startHourSelect"
-        :items="startHourItems"
-        item-text="state"
-        item-value="abbr"
-        label="Select"
-        persistent-hint
-        return-object
-        single-line
-      ></v-select>
+    <div>
+      <div v-show="errorMessage" class="px-4 text-md text-red-400">
+        終了日を超えています
+      </div>
+      <DateTimePickerTime
+        text="開始日"
+        @getDateEvent="getStartDateReceive"
+        :hourSelect="startHourSelect"
+        @getHourEvent="getStartHourReceive"
+        :minutesSelect="startMinutesSelect"
+        @getMinutesEvent="getStartMinutesReceive"
+        :secondsSelect="startSecondsSelect"
+        @getSecondsEvent="getStartSecondsReceive"
+      />
+      <div v-show="errorMessage" class="px-4 text-md text-red-400">
+        開始日よりも前です
+      </div>
+      <DateTimePickerTime
+        text="終了日"
+        @getDateEvent="getEndDateReceive"
+        :hourSelect="endHourSelect"
+        @getHourEvent="getEndHourReceive"
+        :minutesSelect="endMinutesSelect"
+        @getMinutesEvent="getEndMinutesReceive"
+        :secondsSelect="endSecondsSelect"
+        @getSecondsEvent="getEndSecondsReceive"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import Select from "@/components/config/Select";
-import DateTimePicker from "@/components/config/DateTimePicker";
+import DateTimePickerTime from "@/components/config/DateTimePickerTime";
 
 import { mapGetters, mapActions } from "vuex";
 export default {
+  computed: {
+    ...mapGetters("config", [
+      "showConfig",
+      "publishedBefore",
+      "publishedAfter",
+      "params",
+    ]),
+  },
   data() {
     return {
-      startHourSelect: { state: "0時", abbr: "0" },
-      startHourItems: [
-        { state: "0時", abbr: "0" },
-        { state: "1時", abbr: "1" },
-        { state: "2時", abbr: "2" },
-        { state: "3時", abbr: "3" },
-        { state: "4時", abbr: "4" },
-        { state: "5時", abbr: "5" },
-        { state: "6時", abbr: "6" },
-        { state: "7時", abbr: "7" },
-        { state: "8時", abbr: "8" },
-        { state: "9時", abbr: "9" },
-        { state: "10時", abbr: "10" },
-        { state: "11時", abbr: "11" },
-        { state: "12時", abbr: "12" },
-        { state: "13時", abbr: "13" },
-        { state: "14時", abbr: "14" },
-        { state: "15時", abbr: "15" },
-        { state: "16時", abbr: "16" },
-        { state: "17時", abbr: "17" },
-        { state: "18時", abbr: "18" },
-        { state: "19時", abbr: "19" },
-        { state: "20時", abbr: "20" },
-        { state: "21時", abbr: "21" },
-        { state: "22時", abbr: "22" },
-        { state: "23時", abbr: "23" },
-      ],
+      pms: null,
+      errorMessage: false,
+      startHourSelect: { state: "0時", abbr: "00" },
+      startMinutesSelect: { state: "0分", abbr: "00" },
+      startSecondsSelect: { state: "0秒", abbr: "00" },
+      endHourSelect: { state: "23時", abbr: "23" },
+      endMinutesSelect: { state: "59分", abbr: "59" },
+      endSecondsSelect: { state: "59秒", abbr: "59" },
     };
   },
-  computed: {
-    ...mapGetters("config", ["showConfig"]),
+  mounted() {
+    this.pms = {
+      key: this.params.key,
+      maxResults: this.params.maxResults,
+      order: this.params.order,
+      part: this.params.part,
+      publishedBefore: this.publishedBefore,
+      publishedAfter: this.publishedAfter,
+      q: "",
+      type: this.params.type,
+    };
   },
-
   methods: {
-    ...mapActions("config", ["setStartDateAction"]),
-    getDateReceive(date) {
+    ...mapActions(["searchAction"]),
+    ...mapActions("config", [
+      "setParamsAction",
+      "setStartDateAction",
+      "setStartHourAction",
+      "setStartMinutesAction",
+      "setStartSecondsAction",
+      "setEndDateAction",
+      "setEndHourAction",
+      "setEndMinutesAction",
+      "setEndSecondsAction",
+    ]),
+    getStartDateReceive(date) {
       this.setStartDateAction({ date });
+      this.search();
+    },
+    getEndDateReceive(date) {
+      this.setEndDateAction({ date });
+      this.search();
+    },
+    getStartHourReceive(data) {
+      this.setStartHourAction(data);
+      this.search();
+    },
+    getStartMinutesReceive(data) {
+      this.setStartMinutesAction(data);
+      this.search();
+    },
+    getStartSecondsReceive(data) {
+      this.setStartSecondsAction(data);
+      this.search();
+    },
+    getEndHourReceive(data) {
+      this.setEndHourAction(data);
+      this.search();
+    },
+    getEndMinutesReceive(data) {
+      this.setEndMinutesAction(data);
+      this.search();
+    },
+    getEndSecondsReceive(data) {
+      this.setEndSecondsAction(data);
+      this.search();
+    },
+    search() {
+      this.pms.publishedAfter = this.publishedAfter;
+      this.pms.publishedBefore = this.publishedBefore;
+      const publishedAfter = new Date(this.publishedAfter).getTime();
+      const publishedBefore = new Date(this.publishedBefore).getTime();
+      if (publishedAfter > publishedBefore) {
+        this.errorMessage = true;
+        return;
+      }
+      this.errorMessage = false;
+      this.setParamsAction({ params: this.pms });
+      this.searchAction({ params: this.pms });
     },
   },
   components: {
     Select,
-    DateTimePicker,
+    DateTimePickerTime,
   },
 };
 </script>

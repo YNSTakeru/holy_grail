@@ -23,10 +23,10 @@ export default new Vuex.Store({
   },
   actions: {
     async searchAction({ commit }, request) {
-      // firebaseに登録されているか確認する
       const db = getFirestore();
       const requestParams =
         request.params.q +
+        request.params.publishedAfter +
         request.params.publishedBefore +
         request.params.order;
       const docRef = doc(db, "videoList", requestParams);

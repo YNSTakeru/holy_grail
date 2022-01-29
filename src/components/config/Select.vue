@@ -117,6 +117,7 @@ export default {
       this.setOrderAction(
         this.orderOptions[this.selectedOrderOptionNumber].value
       );
+
       let params = this.params();
       params.order = this.orderOptions[this.selectedOrderOptionNumber].value;
       this.setParamsAction({ params: params });
