@@ -1,27 +1,44 @@
 <template>
-  <main class="mt-2 grid">
-    <div class="w-full h-56 bg-red-400 flex items-center justify-center mb-4">
+  <main class="mt-2 grid lg:grid-cols-4">
+    <div
+      class="
+        lg:col-span-4
+        w-auto
+        h-56
+        bg-red-400
+        flex
+        items-center
+        justify-center
+        mb-4
+      "
+    >
       <img src="" alt="広告" />
     </div>
     <div
-      class="mb-4 flex flex-col"
+      class="mb-4 flex flex-col justify-self-center w-96"
       v-for="video in videoList"
       :key="video.videoId"
     >
       <a
-        class="mb-2 mx-auto mt-auto"
+        class="mb-2 h-full w-full flex flex-col justify-center"
         :href="videoPath"
         @click="videoId = video.videoId"
         target="_blank"
+        rel="noreferrer"
       >
-        <img :src="video.image" :alt="video.title" />
+        <img class="" :src="video.image" :alt="video.title" />
       </a>
-      <div class="pl-4">
-        <a :href="videoPath" @click="videoId = video.videoId" target="_blank">
+      <div class="pl-2">
+        <a
+          :href="videoPath"
+          @click="videoId = video.videoId"
+          target="_blank"
+          rel="noreferrer"
+        >
           <div>{{ video.title }}</div>
         </a>
       </div>
-      <div class="pl-4 text-xs">{{ video.publishedAt }}</div>
+      <div class="pl-2 text-xs">{{ video.publishedAt }}</div>
     </div>
   </main>
 </template>
